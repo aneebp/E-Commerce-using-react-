@@ -1,11 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import detImg from "../assets/img/gallery/gallery1.png";
 import Header from "../components/Header";
 import Services from "../components/Services";
 import Footer from "../components/Footer";
+import Spinner from "../components/Spinner";
 
 const ProductDetails = () => {
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  console.log("haaai", id, { id });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch job details");
+        }
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.log("ERROR WHILE FETCHING,", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (!product) {
+    return <div>Error: Product not found</div>;
+  }
+  console.log("haaai");
   return (
     <>
       <Header></Header>
@@ -19,7 +51,7 @@ const ProductDetails = () => {
                     <a href="/">Home</a>
                   </li>
                   <li className="breadcrumb-item">
-                    <Link to="/product-details">shop</Link>
+                    <Link to="/shop">shop</Link>
                   </li>
                   <li className="breadcrumb-item">
                     <a href="#">Product Details</a>
@@ -38,19 +70,7 @@ const ProductDetails = () => {
                 <h2>Description</h2>
               </div>
               <div className="directory-cap mb-40">
-                <p>
-                  There are many variations of passages of Lorem Ipsum
-                  available, but the majority have suffered alteration in some
-                  form, by injected humour, or randomised words which don't look
-                  even slightly believable. If you are going to use a passage of
-                  Lorem Ipsum, you need to be sure there isn't anything
-                  embarrassing hidden in the middle of text. All the Lorem Ipsum
-                  generators on the Internet tend to repeat predefined chunks as
-                  necessary, making this the first true generator on the
-                  Internet. It uses a dictionary of over 200 Latin words,
-                  combined with a handful of model sentence structures, to
-                  generate Lorem Ipsum which looks reasonable.
-                </p>
+                <p>{product.description}</p>
               </div>
               <div className="small-tittle mb-20">
                 <h2>Image</h2>
@@ -58,7 +78,7 @@ const ProductDetails = () => {
               <div className="gallery-img">
                 <div className="row">
                   <div className="col-lg-6">
-                    <img src={detImg} className="mb-30" alt="" />
+                    <img src={product.image} className="mb-30" alt="" />
                   </div>
                 </div>
               </div>
