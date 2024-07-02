@@ -1,24 +1,27 @@
-import { useState } from "react";
-import RingLoader from "react-spinners/RingLoader";
+import React, { useState } from "react";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
-const override = {
-  display: "block",
-  margin: "100px auto",
+const containerStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
 };
 
 function Spinner() {
   const [loading, setLoading] = useState(true);
   return (
-    <>
-      <RingLoader
+    <div style={containerStyle}>
+      <ScaleLoader
         color="blue"
         loading={loading}
-        cssOverride={override}
+        cssOverride={{}}
         size={150}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
-    </>
+    </div>
   );
 }
+
 export default Spinner;

@@ -10,8 +10,6 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-  console.log("haaai", id, { id });
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,7 +35,6 @@ const ProductDetails = () => {
   if (!product) {
     return <div>Error: Product not found</div>;
   }
-  console.log("haaai");
   return (
     <>
       <Header></Header>
